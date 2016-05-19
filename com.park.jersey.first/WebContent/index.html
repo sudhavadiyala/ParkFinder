@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js" ></script>
+</head>
+<body>
+
+<script>
+var find = function(){
+	console.log("In find method");
+	var zip = $("#zipcode").val();
+	var s = document.getElementById("st");
+	var state = s.options[s.selectedIndex].text;
+	var table = document.createElement('table');
+	console.log(zip);
+	console.log(state);
+	$.ajax({	
+		url: 'http://localhost:8081/com.park.jersey.first/rest/parks/getall?zp='+zip,
+		dataType: "json",		
+	    type : 'GET',
+	    success: function(data){
+	    	console.log(data.length);
+	    	
+	    	for(var i=0;i<data.length;i++)
+	        {
+	    		var tr = document.createElement('tr');   
+
+	    	    var td1 = document.createElement('td');
+	    	    var td2 = document.createElement('td');
+	    	    var td3 = document.createElement('td');
+	    	    var td4 = document.createElement('td');
+	    	    var td5 = document.createElement('td');
+	    	    var td6 = document.createElement('td');
+
+	    	    var text1 = document.createTextNode(data[i].park_name);
+	    	    var text2 = document.createTextNode(data[i].park_location);
+	    	    var text3 = document.createTextNode(data[i].park_distance+"miles");
+	    	    var text4 = document.createTextNode(data[i].park_contactnum);
+	    	    var text5 = document.createTextNode(data[i].park_opendays);
+	    	    var text6 = document.createTextNode(data[i].park_opentimings);
+
+	    	    td1.appendChild(text1);
+	    	    td2.appendChild(text2);
+	    	    td3.appendChild(text3);
+	    	    td4.appendChild(text4);
+	    	    td5.appendChild(text5);
+	    	    td6.appendChild(text6);
+	    	    tr.appendChild(td1);
+	    	    tr.appendChild(td2);
+	    	    tr.appendChild(td3);
+	    	    tr.appendChild(td4);
+	    	    tr.appendChild(td5);
+	    	    tr.appendChild(td6);
+
+	    	    table.appendChild(tr);
+	     } 
+	    	
+	    }
+	});	
+	document.body.appendChild(table);
+}
+</script>
+
+<form method="post" action="find()">
+
+<h3>ParkFinder Application</h3>
+<input id="zipcode" type="text" placeholder="Please Enter the Zip Code" >
+<select id="st" name="state">
+<option value="New Jersey">New Jersey</option>
+<option value="Virginia">Virginia</option>
+<option value="Washington DC">Washington DC</option>
+<option value="Pennsylvania">Pennsylvania</option>
+
+</select>
+<input type="button" value="Submit" onclick="find()">
+
+</form>
+
+
+</body>
+</html>
